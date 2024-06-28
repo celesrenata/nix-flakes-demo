@@ -144,7 +144,7 @@
   security.sudo.configFile = ''
     root   ALL=(ALL:ALL) SETENV: ALL
     %wheel ALL=(ALL:ALL) SETENV: ALL
-    celes  ALL=(ALL:ALL) SETENV: ALL
+    demo  ALL=(ALL:ALL) SETENV: ALL
   '';
 
   # Gnome Keyring
@@ -178,9 +178,10 @@
   nix.optimise.automatic = true;
  
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.celes = {
+  users.users.demo = {
     isNormalUser = true;
-    description = "Celes Renata";
+    description = "Demo User";
+    password = "demo";
     extraGroups = [ "libvirtd" "networkmanager" "wheel" "input" "uinput" "render" "video" "audio" ];
     packages = with pkgs; [
       firefox
