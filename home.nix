@@ -9,7 +9,7 @@ let
   wofi-calc = pkgs.fetchFromGitHub {
     owner = "Zeioth";
     repo = "wofi-calc";
-    rev = "f3966c6a7740ece4afa68a5a4bca68bd00790c0b";
+    rev = "edd316f3f40a6fcb2afadf5b6d9b14cc75a901e0";
     sha256 = "sha256-y8GoTHm0zPkeXhYS/enNAIrU+RhrUMnQ41MdHWWTPas=";
   };
   in
