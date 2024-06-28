@@ -78,7 +78,7 @@
               inherit pkgs-stable;
               inherit pkgs-unstable;
             };
-            home-manager.users.celes = import ./home.nix;
+            home-manager.users.demo = import ./home.nix;
           }
         ];
       };
