@@ -189,7 +189,6 @@ let
         stripRoot = false;
       };
     })
-    jetbrains.pycharm-professional
 
     # Other
     graphviz
