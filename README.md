@@ -51,3 +51,5 @@
    10. `launchctl setenv OLLAMA_HOST "192.168.128.1"` change host to `0.0.0.0` if you want it local and remote.
    11. Start Ollama
    12. Test Ollama connectivity from VM
+10. Yeah, but no gestures!?
+    1. That is a current limitation of UTM, sorry! BUT! if you attach your apple touchpad to your macbook and then pass the touchpad to the VM as a **USB** device, you will a great time, I promise!
