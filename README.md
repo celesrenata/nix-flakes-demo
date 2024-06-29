@@ -34,4 +34,20 @@
    7. `reboot`
    8. Login with demo:demo
    9. System will reboot and configure itself
-   10. Login again and enjoy!
+   10. Login again.
+   11. Open foot `command + control + h` or `command + space` and type 'foot'
+   12. `ip addr`
+   13. get the host only IP and remember it for the next steps.
+9. Setup the Host system:
+   1. install homebrew: `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
+   2. Install uniclip: `brew install quackduck/tap/uniclip`
+   3. `uniclip 192.168.128.2:53701` Your IP may vary, your port will not.
+   4. Install Ollama: `brew install ollama`
+   5. Start Ollama
+   6. install model, system is designed for the codellama:13b-instruct model, you can change it when you are wise enough in this environment under: `.config/ags/services/gpt.js`
+   7. `ollam run codellama:13b-instruct`
+   8. `/bye`
+   9. Stop Ollama
+   10. `launchctl setenv OLLAMA_HOST "192.168.128.1"` change host to `0.0.0.0` if you want it local and remote.
+   11. Start Ollama
+   12. Test Ollama connectivity from VM
