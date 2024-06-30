@@ -3,8 +3,8 @@ let
   celes-dots = pkgs.fetchFromGitHub {
     owner = "celesrenata";
     repo = "dotfiles";
-    rev = "cf435920e9d85d3f2bad768dd6ad12ef22a1ac2c";
-    sha256 = "sha256-UgG4xSyJLo+z6SVskIR1op/5nN9h7bClGFblqToNzII=";
+    rev = "a24961dd618ca10cfa50851aedff2a7e1affdeb0";
+    sha256 = "sha256-QQVeINXRjRmU9eOX1OUTzHu0amz4ZFCJK8n8jYo+YPM=";
   };
   wofi-calc = pkgs.fetchFromGitHub {
     owner = "Zeioth";
@@ -39,6 +39,10 @@ let
     source = pkgs.end-4-dots;
     recursive = true;   # link recursively
     executable = true;  # make all files executable
+  };
+  home.file."Backgrounds" = {
+    source = celes-dots + "/Backgrounds":
+    recursive = true;
   };
   home.file.".local/bin/initialSetup.sh" = {
     source = pkgs.end-4-dots + "/.local/bin/initialSetup.sh";
