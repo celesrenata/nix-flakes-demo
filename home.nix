@@ -41,7 +41,7 @@ let
     executable = true;  # make all files executable
   };
   home.file."Backgrounds" = {
-    source = celes-dots + "/Backgrounds":
+    source = celes-dots + "/Backgrounds";
     recursive = true;
   };
   home.file.".local/bin/initialSetup.sh" = {
