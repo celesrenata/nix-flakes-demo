@@ -59,9 +59,7 @@ let
   home.file.".config/hypr/hyprland.conf" = {
     source = pkgs.end-4-dots + "/hypr/hyprland.conf";
   };
-  home.file."Backgrounds/love-is-love.jpg" = {
-    source = celes-dots + "/love-is-love.jpg";
-  };
+  
   # encode the file content in nix configuration file directly
   # home.file.".xxx".text = ''
   #     xxx
@@ -106,8 +104,7 @@ let
     # here is some command line tools I use frequently
     # feel free to add your own or remove some of them
 
-    neofetch
-    macchina
+    fastfetch
     nnn # terminal file manager
 
     # archives
