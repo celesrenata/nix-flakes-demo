@@ -12,7 +12,7 @@ rec {
         appimage-exec.sh -x $out ${src}/${pname}-${version}/${pname}
 
         # JetBrains ship a broken desktop file. Despite registering a custom scheme handler for jetbrains:// URLs, they never mark the command as being suitable for passing URLs to. Ergo, the handler never receives its payload. This causes various things to break, including login. Reported upstream at: https://youtrack.jetbrains.com/issue/TBX-11478/
-        sed -Ei 's/( %U)?$/ %U/' $out/jetbrains-toolbox.desktop;
+        sed -Ei '/Exec/c\Exec=jetbrains-toolbox %U' $out/jetbrains-toolbox.desktop;
       '';
 
     src = prev.fetchzip {
