@@ -7,7 +7,7 @@ rec {
       owner = "celesrenata";
       repo = "dots-hyprland";
       rev = "2cf1a28da7b3b6f44eed76a1c9fdb47087de3c16";
-      sha256 = "sha256-hzLxQARSSS/ptVGzNfYWDNJzTaaumAZ8Av5tHC+2Q0Q=";
+      sha256 = "sha256-OIySYOLqCPzniZ7MZ3vvRb/I67rjPhJofPGP2ys7buc=";
     };
     
     installPhase = ''
