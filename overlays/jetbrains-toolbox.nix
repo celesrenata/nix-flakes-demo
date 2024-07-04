@@ -1,7 +1,6 @@
 final: prev:
 
 rec {
-  
   jetbrains-toolbox-aarch64 = prev.stdenv.mkDerivation rec {
     pname = "jetbrains-toolbox";
     version = "2.4.0.32175";
@@ -32,7 +31,7 @@ rec {
     installPhase = ''
       runHook preInstall;
       
-      install -Dm644 ${appimageContents}/jetbrains-toolbox.desktop $out/share/icons/hicolor/scalable/apps/jetbrains-toolbox.svg
+      install -Dm644 ${../resources/icons/jetbrains-toolbox.svg} $out/share/icons/hicolor/scalable/apps/jetbrains-toolbox.svg
       makeWrapper ${appimage}/bin/${pname} $out/bin/${pname} --append-flags "--update-failed" --prefix LD_LIBRARY_PATH : ${prev.lib.makeLibraryPath [prev.icu]} --prefix MESA_EXTENSION_OVERRIDE : "-GL_ARB_invalidate_subdata" --set TOOLBOX_JDK "${prev.pkgs.jetbrains.jdk}" --set JETBRAINSCLIENT_JDK "${prev.pkgs.jetbrains.jdk.home}"
       
       runHook postInstall;
