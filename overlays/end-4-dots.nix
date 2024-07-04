@@ -6,7 +6,7 @@ rec {
     src = prev.fetchFromGitHub {
       owner = "celesrenata";
       repo = "dots-hyprland";
-      rev = "2cf1a28da7b3b6f44eed76a1c9fdb47087de3c16";
+      rev = "910a6304ea349df1ef0631cc2ceffd2b58abf575";
       sha256 = "sha256-OIySYOLqCPzniZ7MZ3vvRb/I67rjPhJofPGP2ys7buc=";
     };
     
