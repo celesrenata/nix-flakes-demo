@@ -35,6 +35,9 @@
       config = {
         allowUnfree = true;
       };
+      overlays = [
+        (import ./overlays/jetbrains-toolbox.nix)
+      ];
     };
     pkgs = import inputs.nixpkgs {
       inherit system;

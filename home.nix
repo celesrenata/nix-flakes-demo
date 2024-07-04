@@ -1,4 +1,4 @@
-{ inputs, pkgs, pkgs-stable, ... }: 
+{ inputs, pkgs, pkgs-unstable, ... }: 
 let
   celes-dots = pkgs.fetchFromGitHub {
     owner = "celesrenata";
@@ -19,7 +19,7 @@ let
   programs.ags = {
     enable = true;
     configDir = null;
-    extraPackages = with pkgs-stable; [
+    extraPackages = with pkgs; [
       gtksourceview
       webkitgtk
       accountsservice
@@ -100,7 +100,7 @@ let
 
   # Packages that should be installed to the user profile.
   home.packages = 
-  (with pkgs-stable; [
+  (with pkgs; [
     # here is some command line tools I use frequently
     # feel free to add your own or remove some of them
 
@@ -181,15 +181,6 @@ let
     gtkmm3
     gtksourceviewmm
     cairomm
-    (jetbrains-toolbox.overrideAttrs rec {
-      meta.platforms = [ "aarch64-linux" ];
-      version = "2.3.2.31487";
-      src = fetchzip {
-        url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}-arm64.tar.gz";
-        sha256 = "sha256-8ds1cjvbVMZC5H9DgbrH74tPZ+hPfO6HfbL1UjTHkmg=";
-        stripRoot = false;
-      };
-    })
 
     # Other
     graphviz
@@ -297,6 +288,12 @@ let
     swww
     webp-pixbuf-loader
     wireplumber
+  ])
+
+  ++
+
+  (with pkgs-unstable; [
+    jetbrains-toolbox-aarch64
   ]);
 
   # basic configuration of git, please change to your own
