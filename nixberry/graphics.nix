@@ -4,9 +4,8 @@
     environment.systemPackages = with pkgs; [
       libGL
     ];
-    hardware.opengl = {
+    hardware.graphics = {
       enable = true;
-      driSupport = true;
       extraPackages = with pkgs; [
         vaapiVdpau
         libvdpau-va-gl

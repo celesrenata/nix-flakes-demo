@@ -2,10 +2,11 @@
   description = "NixOS configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nyx.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
-    home-manager.url = "github:nix-community/home-manager/release-24.05";
+    home-manager.url = "github:nix-community/home-manager";
     anyrun.url = "github:Kirottu/anyrun";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     #anyrun.inputs.nixpkgs.follows = "nixpkgs";
@@ -16,7 +17,7 @@
     uniclip.url = "github:celesrenata/uniclip";
   };
 
-  outputs = inputs@{ nixpkgs, nixpkgs-stable, nixpkgs-unstable, anyrun, home-manager, dream2nix, nixos-hardware, uniclip, ... }:
+  outputs = inputs@{ nixpkgs, nixpkgs-stable, nixpkgs-unstable, nyx, anyrun, home-manager, dream2nix, nixos-hardware, uniclip, ... }:
   let
     system = "aarch64-linux";
     lib = nixpkgs.lib;
@@ -37,6 +38,7 @@
       };
       overlays = [
         (import ./overlays/jetbrains-toolbox.nix)
+        nyx.overlays.default
       ];
     };
     pkgs = import inputs.nixpkgs {
@@ -73,6 +75,7 @@
           ./nixberry/networking.nix
           ./nixberry/virtualisation.nix
           home-manager.nixosModules.home-manager
+          nyx.nixosModules.default
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;

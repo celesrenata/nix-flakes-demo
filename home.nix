@@ -1,4 +1,4 @@
-{ inputs, pkgs, pkgs-unstable, ... }: 
+{ inputs, pkgs, pkgs-stable, pkgs-unstable, ... }: 
 let
   celes-dots = pkgs.fetchFromGitHub {
     owner = "celesrenata";
@@ -100,7 +100,7 @@ let
 
   # Packages that should be installed to the user profile.
   home.packages = 
-  (with pkgs; [
+  (with pkgs-stable; [
     # here is some command line tools I use frequently
     # feel free to add your own or remove some of them
 
@@ -249,7 +249,7 @@ let
 
   ++
 
-    (with pkgs; [
+    (with pkgs-stable; [
     adw-gtk3
     dart-sass
     eza
@@ -261,7 +261,7 @@ let
     # Python
     pyenv.out
     (python312.withPackages(ps: with ps; [
-      materialyoucolor
+      pkgs.materialyoucolor
       material-color-utilities
       pillow
       poetry-core
@@ -364,7 +364,7 @@ let
   # You can update home Manager without changing this value. See
   # the home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "24.05";
+  home.stateVersion = "24.11";
 
   # Let home Manager install and manage itself.
   programs.home-manager.enable = true;

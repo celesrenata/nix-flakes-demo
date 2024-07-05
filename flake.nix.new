@@ -1,0 +1,142 @@
+{
+  description = "NixOS configuration";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs-old.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    home-manager.url = "github:nix-community/home-manager";
+    nur.url = "github:nix-community/NUR";
+    anyrun.url = "github:Kirottu/anyrun";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    ags.url = "github:Aylur/ags";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    dream2nix.url = "github:nix-community/dream2nix";
+    linux_rpi5.url = "gitlab:vriska/nix-rpi5";
+  };
+
+  outputs = inputs@{ linux_rpi5, nixpkgs, nixpkgs-old, nixpkgs-unstable, nur, anyrun, home-manager, dream2nix, nixos-hardware, ... }:
+  let
+    system = "aarch64-linux";
+    lib = nixpkgs.lib;
+    pkgs-old = import inputs.nixpkgs-old {
+      inherit system;
+      config = {
+        allowUnfree = true;
+        #allowBroken = true;
+      };
+    };
+    pkgs-unstable = import inputs.nixpkgs-unstable {
+      inherit inputs;
+      inherit system;
+      config = {
+        allowUnfree = true;
+        #allowBroken = true;
+      };
+    };
+    overlay-linux-rpi5 = final: prev:
+    {
+      inherit inputs;
+      rtl8821cuOverride = prev.stdenv.mkDerivation rec {
+        pname = "rtl8821cu";
+        version = "${inputs.linux_rpi5.legacyPackages.aarch64-linux.linuxPackages_rpi5.kernel.version}-unstable-2024-05-30";
+      
+        src = prev.fetchFromGitHub {
+          owner = "morrownr";
+          repo = "8821cu-20210916";
+          rev = "f6d4598290c5e9c8e545130e8a31d130f6d135f4";
+          hash = "sha256-jpMf8K9diJ3mbEkP9Cp+VwairK+pwiEGU/AtUIouCqM=";
+        };
+      
+        hardeningDisable = [ "pic" ];
+      
+        nativeBuildInputs = [ prev.bc ] ++ inputs.linux_rpi5.legacyPackages.aarch64-linux.linuxPackages_rpi5.kernel.moduleBuildDependencies;
+        makeFlags = inputs.linux_rpi5.legacyPackages.aarch64-linux.linuxPackages_rpi5.kernel.makeFlags;
+      
+        prePatch = ''
+          substituteInPlace ./Makefile \
+            --replace /lib/modules/ "${inputs.linux_rpi5.legacyPackages.aarch64-linux.linuxPackages_rpi5.kernel.dev}/lib/modules/" \
+            --replace /sbin/depmod \# \
+            --replace '$(MODDESTDIR)' "$out/lib/modules/${inputs.linux_rpi5.legacyPackages.aarch64-linux.linuxPackages_rpi5.kernel.modDirVersion}/kernel/net/wireless/"
+        '';
+      
+        preInstall = ''
+          mkdir -p "$out/lib/modules/${inputs.linux_rpi5.legacyPackages.aarch64-linux.linuxPackages_rpi5.kernel.modDirVersion}/kernel/net/wireless/"
+        '';
+      
+        enableParallelBuilding = true;
+      
+        meta = with prev.lib; {
+          description = "Realtek rtl8821cu driver";
+          homepage = "https://github.com/morrownr/8821cu";
+          license = licenses.gpl2Only;
+          platforms = platforms.linux;
+          maintainers = [ maintainers.contrun ];
+        };
+      };
+    };
+
+    pkgs = import inputs.nixpkgs {
+      inherit system;
+      inherit linux_rpi5;
+      config.allowUnfree = true;
+      config.permittedInsecurePackages = [
+        "openssl-1.1.1w"
+      ];
+      config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+        "vscode"
+      ];
+      config.allowUnsupportedSystem = true;
+      overlays = [
+        (import ./overlays/debugpy.nix)
+        (import ./overlays/materialyoucolor.nix)
+        (import ./overlays/end-4-dots.nix)
+        (import ./overlays/wofi-calc.nix)
+        (import ./overlays/box64.nix)
+        (import ./overlays/argononed.nix)
+        (import ./overlays/helmfile.nix)
+        overlay-linux-rpi5
+        
+        # (import ./overlays/wireless.nix {
+        #   inherit linux_rpi5;
+        # })
+      ];
+    };
+  in {
+    nixosConfigurations = {
+      nixberry = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          inherit linux_rpi5;
+	        inherit pkgs;
+          inherit pkgs-stable;
+          inherit pkgs-unstable;
+        };
+        system.packages = [ anyrun.packages.${system}.anyrun
+                          ];
+        
+        modules = [
+          ./configuration.nix
+          ./hardware-configuration.nix
+          #./remote-build.nix
+          ./nixberry/boot.nix
+          ./nixberry/cpu.nix
+          ./nixberry/graphics.nix
+          ./nixberry/networking.nix
+          ./nixberry/virtualisation.nix
+          #./nixberry/wireless.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { 
+              inherit inputs;
+              inherit pkgs-stable;
+              inherit pkgs-unstable;
+            };
+            home-manager.users.celes = import ./home.nix;
+          }
+        ];
+      };
+    };
+  };
+}
