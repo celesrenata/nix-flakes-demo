@@ -212,6 +212,7 @@ let
     gnome.gnome-control-center
     gnome.gnome-bluetooth
     gnome.gnome-shell
+    gnome.nautilus
     yaru-theme
     blueberry
     networkmanager
