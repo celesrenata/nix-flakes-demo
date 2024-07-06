@@ -61,6 +61,7 @@
 
   # Enable the Enlightenment Desktop Environment.
   services.xserver.desktopManager.mate.enable = true;
+  services.xserver.desktopManager.mate.enableWaylandSession = true;
 
   programs.hyprland = {
     # Install the packages from nixpkgs
