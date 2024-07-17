@@ -54,8 +54,5 @@
         capabilities = "cap_sys_admin+p";
         source = "${pkgs.sunshine}/bin/sunshine";
      };
-    environment.systemPackages = [
-      pkgs.xivlauncher
-    ];
   };
 }
