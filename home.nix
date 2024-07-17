@@ -15,8 +15,8 @@ let
   winapps = pkgs.fetchFromGitHub {
     owner = "celesrenata";
     repo = "winapps";
-    rev = "0319c70fa0dec2da241e9a4b4e35a164f99d6307";
-    sha256 = "sha256-+ZAtEDrHuLJBzF+R6guD7jYltoQcs88qEMvvpjiAXqI=";
+    rev = "6e6cbc2427f160e586cb1fe45e3e873417cd8397";
+    sha256 = "sha256-scWhz8xYCq6jujnlDudH/NOLb/nw7+vmY+cF9tbA/yk=";
   };
 
   in
