@@ -1,0 +1,11 @@
+--- a/share/tiny-dfr/config.toml
++++ b/share/tiny-dfr/config.toml
+@@ -4,7 +4,7 @@
+ 
+ # F{number} keys are shown when Fn is not pressed by default.
+ # Set this to true if you want the media keys to be shown without Fn pressed
+-MediaLayerDefault = false
++MediaLayerDefault = true 
+ 
+ # Set this to false if you want to hide the button outline,
+ # leaving only the text/logo
