@@ -1,7 +1,7 @@
 final: prev:
 
 rec {
-  jetbrains-toolbox-aarch64 = prev.stdenv.mkDerivation rec {
+  jetbrains-toolboxOverride = prev.stdenv.mkDerivation rec {
     pname = "jetbrains-toolbox";
     version = "2.4.0.32175";
 
@@ -15,8 +15,8 @@ rec {
       '';
 
     src = prev.fetchzip {
-      url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}-arm64.tar.gz";
-      sha256 = "sha256-fBVTQ2jAVMqDQ8JrRpxh9GnEKoniG47TCZnUy3Dt59g=";
+      url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}.tar.gz";
+      sha256 = "sha256-+EKl8o+S5nwV3u+RrhxuOm/6dLH6zRSvFnyaZRO8xc0=";
       stripRoot = false;
     };
 
@@ -47,8 +47,9 @@ rec {
       homepage = "https://jetbrains.com/";
       license = licenses.unfree;
       maintainers = with maintainers; [AnatolyPopov];
-      platforms = ["aarch64-linux"];
+      platforms = ["x86_64-linux"];
       mainProgram = "${pname}";
     };
   };
 }
+

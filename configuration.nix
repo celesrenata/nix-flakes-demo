@@ -2,35 +2,36 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ pkgs, pkgs-stable, ... }:
+{ pkgs, pkgs-unstable, ... }:
 {
   # Licences.
-  nixpkgs.config = {
-    allowUnfree = true;
-  };  
-
-  # Inscure packages allowed.
-  nixpkgs.config.permittedInsecurePackages = [
-    "python-2.7.18.7"
-    "openssl-1.1.1w"
-  ];
+  nixpkgs.config.allowUnfree = true;
 
   imports =
     [ # Include the results of the hardware scan.
+      #"${pkgs-unstable}/nixos/modules/programs/alvr.nix"
       ./hardware-configuration.nix
     ];
 
+  environment.localBinInPath = true;
   # Enable Flakes.
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Bootloader.
+  # boot.loader.systemd-boot.enable = true;
+  # boot.loader.efi.canTouchEfiVariables = true;
+  #boot.kernelPackages = lib.mkForce pkgs.linuxPackages_6_6;
+  boot.plymouth.enable = true;
+  # Use the Grub EFI boot loader.
 
   # Udev rules.
   hardware.uinput.enable = true;
 
   # Set your time zone.
 
-  services.automatic-timezoned.enable = true;
-  location.provider = "geoclue2";
-  #time.timeZone = "America/Los_Angeles";
+  #services.automatic-timezoned.enable = true;
+  #location.provider = "geoclue2";
+  time.timeZone = "America/Los_Angeles";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -48,54 +49,53 @@
   };
 
   # Enable the GDM Display Manager.
-  services.displayManager = {
-    defaultSession = "hyprland";
-  };
-  services.xserver.displayManager.gdm = {
-      enable = true;
-      wayland = true;
-  };
-
+  services.xserver.displayManager.gdm.enable = true;
+  services.displayManager.defaultSession = "hyprland";
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
   # Enable the Enlightenment Desktop Environment.
   services.xserver.desktopManager.mate.enable = true;
-  services.xserver.desktopManager.mate.enableWaylandSession = true;
+
+  # Enable OpenRGB.
+  services.hardware.openrgb.enable = true;
 
   programs.hyprland = {
     # Install the packages from nixpkgs
     enable = true;
-    package = pkgs.hyprland;
+    package = pkgs-unstable.hyprland;
     # Whether to enable Xwayland
     xwayland.enable = true;
   };
-
+ 
   programs.fish = {
     enable = true;
   };
-  
   # Enable Location.
   services.geoclue2.enable = true;
 
   # Enable acpid
   services.acpid.enable = true;
 
-  # Enable plymouth
-  boot.plymouth.enable = true;
-
   # Configure keymap in X11
-  services.xserver = {
-    xkb.layout = "us";
-    xkb.variant = "";
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "";
   };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+  services.printing.drivers = [ pkgs.gutenprint ];
+  hardware.sane.enable = true;
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
 
   # Enable sound with pipewire.
   sound.enable = true;
-  hardware.pulseaudio.enable = false;
+  #hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   
   services.pipewire = {
@@ -107,9 +107,9 @@
   };
 
   services.jack = {
-    #jackd.enable = true;
+    jackd.enable = true;
     # support ALSA only programs via ALSA JACK PCM plugin
-    alsa.enable = true;
+    alsa.enable = false;
     # support ALSA only programs via loopback device (supports programs like Steam)
     loopback = {
       enable = true;
@@ -121,7 +121,7 @@
   };
 
   # Enable Fonts.
-  fonts.packages = with pkgs; [
+  fonts.packages = with pkgs-unstable; [
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
@@ -141,11 +141,13 @@
   # Extra Groups
   users.groups.mlocate = {};
   users.groups.plocate = {};
+  users.groups.libvirt = {};
+  users.groups.kvm = {};
 
   security.sudo.configFile = ''
     root   ALL=(ALL:ALL) SETENV: ALL
     %wheel ALL=(ALL:ALL) SETENV: ALL
-    demo  ALL=(ALL:ALL) SETENV: ALL
+    celes  ALL=(ALL:ALL) SETENV: ALL
   '';
 
   # Gnome Keyring
@@ -157,6 +159,7 @@
     enable = true;
     keyboards.mac.settings = {
       main = {
+        fn = "overload(464)";
         control = "layer(meta)";
         meta = "layer(control)";
         rightcontrol = "layer(meta)";
@@ -178,12 +181,16 @@
   # Garbage Collection.
   nix.optimise.automatic = true;
  
+  systemd.user.services.monado.environment = {
+    STEAMVR_LH_ENABLE = "1";
+    XRT_COMPOSITOR_COMPUTE = "1";
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.demo = {
+  users.users.celes = {
     isNormalUser = true;
-    description = "Demo User";
-    password = "demo";
-    extraGroups = [ "libvirtd" "networkmanager" "wheel" "input" "uinput" "render" "video" "audio" ];
+    description = "Celes Renata";
+    extraGroups = [ "networkmanager" "scanner" "lp" "wheel" "input" "uinput" "render" "video" "audio" "docker" "libvirt" "kvm" ];
     packages = with pkgs; [
       firefox
     #  thunderbird
@@ -196,8 +203,7 @@
   environment.sessionVariables.MOZ_ENABLE_WAYLAND = "1";
 
   # $ nix search wget
-  environment.systemPackages = 
-  (with pkgs-stable; [
+  environment.systemPackages = with pkgs; [
     # Editors.
     vim
     
@@ -206,12 +212,14 @@
     curl
     rsync
     nmap
+    pssh
     tmate
 
     # Audio.
     ladspaPlugins
     calf
     lsp-plugins
+    easyeffects
     alsa-utils
 
     # System Tools.
@@ -220,11 +228,24 @@
     networkmanagerapplet
     nix-index
     mlocate
-    barrier
+    util-linux
     openssl
+    xsane
     gnome.simple-scan
     btop
+    usbutils
+    pciutils
     thefuck
+    tldr
+    bc
+    freerdp3Override
+    aws-workspacesOverride
+    tiny-dfr
+    kbd
+    imagemagick
+    sunshine
+    nvtopPackages.full
+    android-tools
 
     # Shells.
     fish
@@ -232,9 +253,29 @@
     bash
 
     # Development Tools.
+    jetbrains-toolboxOverride
     git
+    nodejs_20
+    meson
+    gcc13
+    cmake
+    pkg-config
+    glib.dev
+    glib
+    glibc.dev
+    gobject-introspection.dev
+    pango.dev
+    harfbuzz.dev
+    cairo.dev
+    gdk-pixbuf.dev
+    atk.dev
+    libpulseaudio.dev
+    typescript
+    ninja
+    nixStatic.dev
+    node2nix
+    nil
     sublime4
-    sqlite
 
     # Session.
     polkit
@@ -242,15 +283,21 @@
     dconf
     killall
     gnome.gnome-keyring
+    wayvnc
     evtest
     gnome.zenity
     linux-pam
     cliphist
     sudo
+    xwaylandvideobridge
 
     # Wayland.
+    xdg-desktop-portal-hyprland
     xwayland
+    brightnessctl
     ydotool
+    swww
+    hyprpaper
     fcitx5
     wlsunset
     wtype
@@ -258,13 +305,20 @@
     xorg.xhost
     wev
     wf-recorder
+    ffmpeg-full
     mkvtoolnix-cli
     vulkan-tools
     libva-utils
     wofi
     libqalculate
+    sunshine 
+    moonlight-qt
     xfce.thunar
     wayland-scanner
+    waypipe
+
+    # Media
+    kdenlive
     
     # GTK
     gtk3
@@ -281,19 +335,24 @@
 
     # Not GTK.
     tk
-  ])
 
-  ++
+    # Latex
+    texliveFull
+    texlive.combined.scheme-full
+    latexRes-package
 
-  (with pkgs; [
-    nil
-    foot
+    # Terminals.
     kitty
+    foot
+
+    # Mac Sound.
+    libspatialaudio
     pulseaudio
-    xdg-desktop-portal-hyprland
-    hyprpaper
-    gnome.gdm
-  ]);
+    #t2AppleAudioDSP
+
+    # Mac Camera.
+    libcamera
+  ];
 
   # List services that you want to enable:
 

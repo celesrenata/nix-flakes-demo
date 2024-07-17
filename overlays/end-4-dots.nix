@@ -6,10 +6,10 @@ rec {
     src = prev.fetchFromGitHub {
       owner = "celesrenata";
       repo = "dots-hyprland";
-      rev = "a4af9fe697385d596fb1525001b2892fa442f872";
-      sha256 = "sha256-QV6tn9i6REiAddrGeJ+G1rbYuKMq0dMj0gzTMYmADj8=";
+      rev = "0e7c4c0bf614ee6aeeacd45f00f791cfe3bded35";
+      sha256 = "sha256-D0oAIYFbhxqaice60wQFSw3M5E+wfNSIuaQFu7Ik/QY=";
     };
-    
+
     installPhase = ''
       install -m755 -D .local/bin/fuzzel-emoji $out/.local/bin/fuzzel-emoji
       install -m755 -D .local/bin/initialSetup.sh $out/.local/bin/initialSetup.sh
@@ -22,6 +22,8 @@ rec {
       find hypr -type f | awk '{ print "install -m755 -D " $0 " $out/" $0 }' | bash
       find mpv -type f | awk '{ print "install -m755 -D " $0 " $out/" $0 }' | bash
       find qt5ct -type f | awk '{ print "install -m755 -D " $0 " $out/" $0 }' | bash
+      find touchegg -type f | awk '{ print "install -m755 -D " $0 " $out/" $0 }' | bash
+      find winapps -type f | awk '{ print "install -m755 -D " $0 " $out/" $0 }' | bash
       find wlogout -type f | awk '{ print "install -m755 -D " $0 " $out/" $0 }' | bash
       find zshrc.d -type f | awk '{ print "install -m755 -D " $0 " $out/" $0 }' | bash
       install -m755 -D starship.toml $out/.config/starship.toml

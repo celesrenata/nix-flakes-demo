@@ -2,7 +2,7 @@ final: prev:
 rec {
   python-materialyoucolor-init = prev.python312.override {
     packageOverrides = final: prev: {
-      python-materialyoucolor = prev.buildPythonPackage rec {
+      python-xlib = prev.buildPythonPackage rec {
         pname = "materialyoucolor";
         version = "2.0.9";
         format = "pyproject";

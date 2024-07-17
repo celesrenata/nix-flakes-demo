@@ -1,4 +1,4 @@
-{ inputs, pkgs, pkgs-unstable, ... }: 
+{ inputs, pkgs, pkgs-old, pkgs-unstable, ... }: 
 let
   celes-dots = pkgs.fetchFromGitHub {
     owner = "celesrenata";
@@ -12,6 +12,13 @@ let
     rev = "edd316f3f40a6fcb2afadf5b6d9b14cc75a901e0";
     sha256 = "sha256-y8GoTHm0zPkeXhYS/enNAIrU+RhrUMnQ41MdHWWTPas=";
   };
+  winapps = pkgs.fetchFromGitHub {
+    owner = "celesrenata";
+    repo = "winapps";
+    rev = "0319c70fa0dec2da241e9a4b4e35a164f99d6307";
+    sha256 = "sha256-+ZAtEDrHuLJBzF+R6guD7jYltoQcs88qEMvvpjiAXqI=";
+  };
+
   in
   {
   imports = [ inputs.ags.homeManagerModules.default ];
@@ -20,15 +27,16 @@ let
     enable = true;
     configDir = null;
     extraPackages = with pkgs; [
-      gtksourceview
+      pkgs-old.gtksourceview
+      pkgs-old.gnome.gvfs
       webkitgtk
       accountsservice
     ];
   };
 
   # TODO please change the username & home directory to your own
-  home.username = "demo";
-  home.homeDirectory = "/home/demo";
+  home.username = "celes";
+  home.homeDirectory = "/home/celes";
 
   # link the configuration file in current directory to the specified location in home directory
   # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
@@ -44,6 +52,14 @@ let
     source = celes-dots + "/Backgrounds";
     recursive = true;
   };
+  home.file."winapps/pkg" = {
+    source = winapps;
+    recursive = true;
+    executable = true;
+  };
+  home.file."winapps/runmefirst.sh" = {
+    source = winapps + "/runmefirst.sh";
+  };
   home.file.".local/bin/initialSetup.sh" = {
     source = pkgs.end-4-dots + "/.local/bin/initialSetup.sh";
   };
@@ -57,19 +73,17 @@ let
     source = wofi-calc + "/wofi-calc.sh";
   };
   home.file.".config/hypr/hyprland.conf" = {
-    source = pkgs.end-4-dots + "/hypr/hyprland.conf";
+    source = pkgs.end-4-dots + "/hypr/hyprland.conf.bak";
   };
-  
-  # encode the file content in nix configuration file directly
-  # home.file.".xxx".text = ''
-  #     xxx
-  # '';
+#  home.file.".local/bin/sunshine" = {
+#    source = celes-dots + "/.local/bin/sunshineFixed";
+#  };
 
   # set cursor size and dpi for 4k monitor
-  #xresources.properties = {
-  #  "Xcursor.size" = 24;
-  #  "Xft.dpi" = 172;
-  #};
+  xresources.properties = {
+    "Xcursor.size" = 24;
+    "Xft.dpi" = 172;
+  };
   home.pointerCursor = {
     gtk.enable = true;
     x11.enable = true;
@@ -82,24 +96,52 @@ let
   # VSCode
   programs.vscode = {
     enable = true;
-    package = pkgs.vscode;
+    package = pkgs-unstable.vscode;
     extensions = with pkgs.vscode-extensions; [
-      dracula-theme.theme-dracula
+      #dracula-theme.theme-dracula
       #vscodevim.vim
-      yzhang.markdown-all-in-one
+      #yzhang.markdown-all-in-one
       ms-python.python
       oderwat.indent-rainbow
       eamodio.gitlens
       jnoortheen.nix-ide
+      danielsanmedium.dscodegpt
     ];
   };
   programs.btop.settings = {
+    package = pkgs-unstable.btop;
     color_theme = "Default";
     theme_background = false;
   };
 
+  xdg.desktopEntries.cider = {
+    name = "Cider";
+    genericName = "Music";
+    exec = "env -u NIXOS_OZONE_WL cider --use-gl=desktop %U";
+    icon = "cider";
+  };
+
+  # Obs.
+  programs.obs-studio = {
+    enable = true;
+    package = pkgs-unstable.obs-studio;
+    plugins = with pkgs-unstable.obs-studio-plugins; [
+      wlrobs
+      #pkgs.obs-backgroundremovalOverride
+      obs-backgroundremoval
+      obs-pipewire-audio-capture
+      obs-vaapi
+    ];
+  };
+
   # Packages that should be installed to the user profile.
   home.packages = 
+  (with pkgs-old; [
+    gnome.gvfs 
+  ])
+
+  ++
+
   (with pkgs; [
     # here is some command line tools I use frequently
     # feel free to add your own or remove some of them
@@ -117,13 +159,15 @@ let
     ripgrep # recursively searches directories for a regex pattern
     jq # A lightweight and flexible command-line JSON processor
     yq-go # yaml processer https://github.com/mikefarah/yq
+    eza # A modern replacement for ‘ls’
     fzf # A command-line fuzzy finder
 
     # programs
     firefox
     chromium
-
-    # Extra Launchers.
+    tidal-hifi
+    cider
+    spotify
 
     # networking tools
     mtr # A network diagnostic tool
@@ -138,6 +182,7 @@ let
 
     # Graphical Editing.
     gimp
+    darktable
 
     # misc
     cowsay
@@ -159,17 +204,18 @@ let
     # productivity
     hugo # static site generator
     glow # markdown previewer in terminal
-    inputs.uniclip.packages.aarch64-linux.uniclip # network clipboard manager
 
     iotop # io monitoring
     iftop # network monitoring
 
     # system call monitoring
     strace # system call monitoring
+    ltrace # library call monitoring
     lsof # list open files
 
     # system tools
     sysstat
+    lm_sensors # for `sensors` command
     ethtool
     pciutils # lspci
     usbutils # lsusb
@@ -181,19 +227,62 @@ let
     gtkmm3
     gtksourceviewmm
     cairomm
+    git
 
     # Other
     graphviz
+    cvs
+    mercurial
+    p4
+    subversion
+
+    # Python
+    pyenv.out
+    (python312.withPackages(ps: with ps; [
+      materialyoucolor
+      material-color-utilities
+      pillow
+      poetry-core
+      pywal
+      setuptools-scm
+      wheel
+      pywayland
+      psutil
+      importlib-metadata
+      certifi
+      colorama
+      breezy
+      tqdm
+      # debugpy.overrideAttrs (final: prev: {
+      #   pytestCheckPhase = ''true'';
+      # })
+      pydbus
+      dbus-python
+      pygobject3
+      watchdog
+      pip
+      evdev
+      appdirs
+      inotify-simple
+      ordered-set
+      six
+      hatchling
+      pycairo
+      xkeysnail
+    ]))
 
     # Player and Audio
     pavucontrol
+    wireplumber
     libdbusmenu-gtk3
     plasma-browser-integration
     playerctl
+    swww
     mpv
     vlc
 
     # GTK
+    webp-pixbuf-loader
     gtk-layer-shell
     gtk3
     gtksourceview3
@@ -213,96 +302,57 @@ let
     gnome.gnome-bluetooth
     gnome.gnome-shell
     gnome.nautilus
+    nodejs_20
     yaru-theme
     blueberry
     networkmanager
     brightnessctl
     wlsunset
+    gjs
+    gjs.dev
 
     # AGS and Hyprland dependencies.
     coreutils
     cliphist
     curl
+    ddcutil
     fuzzel
     ripgrep
-    gjs
+    gojq
+    dart-sass
     axel
     wlogout
     wl-clipboard
+    hyprpicker
     gammastep
     libnotify
+    bc
+    xdg-user-dirs
+
+    # Shells and Terminals
+    starship
+    foot
 
     # Themes
+    adw-gtk3
     qt5ct
+    gradience
 
     # Screenshot and Recorder
     swappy
     wf-recorder
     grim
     tesseract
-    slurp
-
-    # Virtualisation
-    spice
-    spice-vdagent
-    spice-gtk 
-  ])
-
-  ++
-
-    (with pkgs; [
-    adw-gtk3
-    dart-sass
-    eza
-    gojq
-    gradience
-    hypridle
-    hyprlock
-    hyprpicker
-    # Python
-    pyenv.out
-    (python312.withPackages(ps: with ps; [
-      materialyoucolor
-      material-color-utilities
-      pillow
-      poetry-core
-      pywal
-      setuptools-scm
-      wheel
-      pywayland
-      psutil
-      pydbus
-      dbus-python
-      pygobject3
-      watchdog
-      pip
-      evdev
-      appdirs
-      inotify-simple
-      ordered-set
-      six
-      hatchling
-      pycairo
-      xkeysnail
-      debugpy
-    ]))
-    swww
-    webp-pixbuf-loader
-    wireplumber
+    slurp 
   ])
 
   ++
 
   (with pkgs-unstable; [
-    jetbrains-toolbox-aarch64
+    hypridle
+    hyprlock
+    python312Packages.debugpy
   ]);
-
-  # basic configuration of git, please change to your own
-  programs.git = {
-    enable = true;
-    userName = "Celes Renata";
-    userEmail = "celes@celestium.life";
-  };
 
   # starship - an customizable prompt for any shell
   programs.starship = {
@@ -344,15 +394,13 @@ let
       k = "kubectl";
       urldecode = "python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'";
       urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
+      cider = "env -u NIXOS_OZONE_WL cider --use-gl=desktop";
     };
     sessionVariables = {
       EDITOR = "vim";
     };
   };
   
-  home.sessionPath = [
-    ".local/bin"
-  ];
   home.sessionVariables = {
     LD_LIBRARY_PATH = "/run/opengl-driver/lib";
   };
