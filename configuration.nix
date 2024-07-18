@@ -198,6 +198,10 @@
     ];
   };
 
+  users.users.shared = {
+    isNormalUser = true;
+  };
+
   # List packages installed in system profile. To search, run:
   # Enable Wayland for Electron.
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
