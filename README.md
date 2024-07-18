@@ -55,7 +55,7 @@
    8. Login with demo:demo
    9. System will reboot and configure itself and reboot
    10. Login again.
-   11. give the system 10 minutes to provision windows
+   11. give the system 10 minutes to provision windows (installation observable from https://127.0.0.1:8006)
    12. run `winapps/runmefirst.sh` to install m365 and configure for your system
       1. It knows when it is provisioned!
    13. in another 10 minutes once m365 is installed, the script will hang after the m365 install window goes away, press 'ctrl + c'
