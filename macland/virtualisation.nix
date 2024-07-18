@@ -26,8 +26,8 @@
           ];
           environment = {
             VERSION = "win11e";
-            USERNAME = "celes";
-            PASSWORD = "renata";
+            USERNAME = "demo";
+            PASSWORD = "demo";
             DISK_SIZE = "36G";
             RAM_SIZE = "6G";
             CPU_CORES = "4";
