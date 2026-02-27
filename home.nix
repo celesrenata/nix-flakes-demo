@@ -334,9 +334,6 @@ let
   home.sessionPath = [
     ".local/bin"
   ];
-  home.sessionVariables = {
-    LD_LIBRARY_PATH = "/run/opengl-driver/lib";
-  };
 
   # This value determines the home Manager release that your
   # configuration is compatible with. This helps avoid breakage
