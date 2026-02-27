@@ -23,6 +23,23 @@ let
     source = celes-dots + "/Backgrounds";
     recursive = true;
   };
+  
+  # Staging directory for mutable configs (used by initialSetup.sh)
+  home.file.".configstaging/quickshell" = {
+    source = inputs.dots-hyprland-source + "/.config/quickshell";
+    recursive = true;
+  };
+  
+  home.file.".configstaging/matugen" = {
+    source = inputs.dots-hyprland-source + "/.config/matugen";
+    recursive = true;
+  };
+  
+  home.file.".configstaging/hypr/hyprland" = {
+    source = inputs.dots-hyprland-source + "/.config/hypr/hyprland";
+    recursive = true;
+  };
+  
   home.file.".local/bin/initialSetup.sh" = {
     source = celes-dots + "/.local/bin/initialSetup.sh";
   };
