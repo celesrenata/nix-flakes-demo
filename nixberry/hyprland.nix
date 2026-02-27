@@ -1,13 +1,12 @@
-# Hyprland configuration for esnixi (desktop)
+# Hyprland configuration for nixberry
 { inputs, lib, pkgs, pkgs-unstable, config, ... }:
 
 {
   imports = [ 
-    inputs.ags.homeManagerModules.default
     inputs.dots-hyprland.homeManagerModules.default
   ];
 
-  # dots-hyprland configuration for esnixi
+  # dots-hyprland configuration for nixberry
   programs.dots-hyprland = {
     enable = true;
     source = pkgs.dots-hyprland-source-filtered;  # Use DP-3 filtered version
