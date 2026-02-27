@@ -12,7 +12,7 @@
       ];
     };
 
-    # VMware SVGA II graphics driver
-    services.xserver.videoDrivers = [ "vmware" ];
+    # Use modesetting driver for VMware Fusion on ARM64
+    services.xserver.videoDrivers = [ "modesetting" ];
   };
 }
