@@ -9,9 +9,11 @@
   # dots-hyprland configuration for nixberry
   programs.dots-hyprland = {
     enable = true;
+    source = inputs.dots-hyprland-source + "/.config";
     packageSet = "essential";
     mode = "hybrid";
     
+    python.enable = true;
     touchegg.enable = lib.mkForce false;
     configuration.copyMiscConfig = lib.mkForce true;
     configuration.applications.foot.enable = lib.mkForce false;
