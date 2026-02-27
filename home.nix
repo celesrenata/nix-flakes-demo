@@ -34,7 +34,7 @@ let
     recursive = true;
   };
   home.file.".local/bin/initialSetup.sh" = {
-    source = inputs.dots-hyprland-source + "/.local/bin/initialSetup.sh";
+    source = celes-dots + "/.local/bin/initialSetup.sh";
   };
   home.file.".local/bin/agsAction.sh" = {
     source = celes-dots + "/.local/bin/agsAction.sh";
