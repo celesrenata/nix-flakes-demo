@@ -236,33 +236,6 @@ let
     hypridle
     hyprlock
     hyprpicker
-    # Python
-    pyenv.out
-    (python312.withPackages(ps: with ps; [
-      materialyoucolor
-      material-color-utilities
-      pillow
-      poetry-core
-      pywal
-      setuptools-scm
-      wheel
-      pywayland
-      psutil
-      pydbus
-      dbus-python
-      pygobject3
-      watchdog
-      pip
-      evdev
-      appdirs
-      inotify-simple
-      ordered-set
-      six
-      hatchling
-      pycairo
-      xkeysnail
-      debugpy
-    ]))
     swww
     webp-pixbuf-loader
     wireplumber
