@@ -46,7 +46,7 @@ let
     source = wofi-calc + "/wofi-calc.sh";
   };
   home.file.".config/hypr/hyprland.conf" = {
-    source = inputs.dots-hyprland-source + "/hypr/hyprland.conf";
+    source = inputs.dots-hyprland-source + "/.config/hypr/hyprland.conf";
   };
   
   # encode the file content in nix configuration file directly
