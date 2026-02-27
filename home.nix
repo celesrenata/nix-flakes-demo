@@ -23,9 +23,6 @@ let
     source = celes-dots + "/Backgrounds";
     recursive = true;
   };
-  home.file.".config/hypr/hyprland.conf" = {
-    source = inputs.dots-hyprland-source + "/.config/hypr/hyprland.conf";
-  };
   home.file.".local/bin/initialSetup.sh" = {
     source = celes-dots + "/.local/bin/initialSetup.sh";
   };
