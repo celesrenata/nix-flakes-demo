@@ -3,16 +3,17 @@
   config = {
     environment.systemPackages = with pkgs; [
       libGL
+      mesa
     ];
-    hardware.opengl = {
+    hardware.graphics = {
       enable = true;
+      enable32Bit = true;
       extraPackages = with pkgs; [
-        libvdpau-va-gl
-        libGL
+        mesa
       ];
     };
 
-    # Load nvidia driver for Xorg and Wayland
-    services.xserver.videoDrivers = [ "virgl" ];
+    # VMware SVGA II graphics driver
+    services.xserver.videoDrivers = [ "vmware" ];
   };
 }
