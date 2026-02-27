@@ -9,7 +9,6 @@
   # dots-hyprland configuration for nixberry
   programs.dots-hyprland = {
     enable = true;
-    source = pkgs.dots-hyprland-source-filtered;  # Use DP-3 filtered version
     packageSet = "essential";
     mode = "hybrid";
     
@@ -23,14 +22,8 @@
     overrides.hyprlandConf = ''
       # Hyprland configuration for esnixi (desktop)
       
-      # Start cursor barrier script to prevent mouse from entering DP-3
-      # exec-once = ${inputs.hyte-touch-infinite-flakes.packages.${pkgs.system}.cursor-barrier}/bin/cursor-barrier
       
-      # Hyte Touch Display Configuration - Isolate DP-3
-      workspace = name:touch, monitor:DP-3, default:true
-      workspace = name:touch, gapsin:0, gapsout:0, border:false
 
-      # Prevent mouse cursor from crossing to DP-3 and enable direct touch
       misc {
           disable_hyprland_logo = true
           disable_splash_rendering = true
@@ -38,23 +31,14 @@
           key_press_enables_dpms = false
       }
 
-      # Isolate DP-3 with workspace rules
-      workspace = DP-3,1
       
-      # Prevent cursor from warping to DP-3
       cursor {
           no_warps = true
           hide_on_touch = true
       }
       
-      # Window rules to lock touch interface to DP-3
-      windowrulev2 = workspace name:touch, title:^(hyte-touch-interface)$
-      windowrulev2 = monitor DP-3, title:^(hyte-touch-interface)$
-      windowrulev2 = fullscreen, title:^(hyte-touch-interface)$
       
       # ProjectM visualizer - behind QuickShell
-      windowrulev2 = workspace name:touch, class:^(projectMSDL)$
-      windowrulev2 = monitor DP-3, class:^(projectMSDL)$
       windowrulev2 = fullscreen, class:^(projectMSDL)$
       
       # OneTrainer window rules - force decorations on Xwayland
@@ -67,15 +51,12 @@
       
 
 
-      # Map Hyte touchpad specifically to DP-3
       device {
           name = ilitek-------ilitek-touch
-          output = DP-3
           enabled = true
           transform = 3
       }
 
-      # Disable cursor on DP-3 for direct touch interaction
       cursor {
           no_warps = true
           hide_on_touch = true
@@ -90,7 +71,6 @@
               drag_lock = false
           }
           touchdevice {
-              output = DP-3
               transform = 3
           }
       }
@@ -378,7 +358,6 @@
       exec-once = ~/.local/bin/initialSetup.sh
       exec-once = hyprctl setcursor Bibata-Modern-Classic 24
       exec-once = systemctl --user start quickshell.service
-      exec-once = [workspace name:touch silent] hyte-touch-interface
       exec-once = wl-paste --watch cliphist store
       exec-once = ~/.config/hypr/hyprland/scripts/start_geoclue_agent.sh
       exec-once = gnome-keyring-daemon --start --components=secrets
