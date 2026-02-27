@@ -14,17 +14,6 @@ let
   };
   in
   {
-  imports = [ inputs.ags.homeManagerModules.default ];
-
-  programs.ags = {
-    enable = true;
-    configDir = null;
-    extraPackages = with pkgs; [
-      gtksourceview
-      webkitgtk_6_0
-      accountsservice
-    ];
-  };
 
   # TODO please change the username & home directory to your own
   home.username = "demo";
@@ -36,16 +25,16 @@ let
   # link all files in `./scripts` to `~/.config/i3/scripts`
 
   home.file.".configstaging" = {
-    source = pkgs.end-4-dots;
-    recursive = true;   # link recursively
-    executable = true;  # make all files executable
+    source = inputs.dots-hyprland-source + "/.config";
+    recursive = true;
+    executable = true;
   };
   home.file."Backgrounds" = {
     source = celes-dots + "/Backgrounds";
     recursive = true;
   };
   home.file.".local/bin/initialSetup.sh" = {
-    source = pkgs.end-4-dots + "/.local/bin/initialSetup.sh";
+    source = inputs.dots-hyprland-source + "/.local/bin/initialSetup.sh";
   };
   home.file.".local/bin/agsAction.sh" = {
     source = celes-dots + "/.local/bin/agsAction.sh";
@@ -57,7 +46,7 @@ let
     source = wofi-calc + "/wofi-calc.sh";
   };
   home.file.".config/hypr/hyprland.conf" = {
-    source = pkgs.end-4-dots + "/hypr/hyprland.conf";
+    source = inputs.dots-hyprland-source + "/hypr/hyprland.conf";
   };
   
   # encode the file content in nix configuration file directly
@@ -100,6 +89,10 @@ let
 
   # Packages that should be installed to the user profile.
   home.packages = 
+  [ inputs.quickshell.packages.aarch64-linux.default ]
+  
+  ++
+  
   (with pkgs; [
     # here is some command line tools I use frequently
     # feel free to add your own or remove some of them
@@ -218,13 +211,12 @@ let
     brightnessctl
     wlsunset
 
-    # AGS and Hyprland dependencies.
+    # Quickshell and Hyprland dependencies.
     coreutils
     cliphist
     curl
     fuzzel
     ripgrep
-    gjs
     axel
     wlogout
     wl-clipboard

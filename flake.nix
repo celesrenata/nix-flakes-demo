@@ -8,15 +8,15 @@
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     anyrun.url = "github:Kirottu/anyrun";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    #anyrun.inputs.nixpkgs.follows = "nixpkgs";
-    #nix-gl-host.url = "github:numtide/nix-gl-host";
-    ags.url = "github:Aylur/ags";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     dream2nix.url = "github:nix-community/dream2nix";
     uniclip.url = "github:celesrenata/uniclip";
+    quickshell.url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
+    dots-hyprland-source.url = "github:celesrenata/dots-hyprland/quickshell";
+    dots-hyprland-source.flake = false;
   };
 
-  outputs = inputs@{ nixpkgs, nixpkgs-stable, nixpkgs-unstable, anyrun, home-manager, dream2nix, nixos-hardware, uniclip, ... }:
+  outputs = inputs@{ nixpkgs, nixpkgs-stable, nixpkgs-unstable, anyrun, home-manager, dream2nix, nixos-hardware, uniclip, quickshell, dots-hyprland-source, ... }:
   let
     system = "aarch64-linux";
     lib = nixpkgs.lib;
@@ -57,11 +57,12 @@
     nixosConfigurations = {
       nixberry = nixpkgs.lib.nixosSystem {
         #inherit system;
-	      specialArgs = {
-	        inherit pkgs;
+        specialArgs = {
+          inherit pkgs;
           inherit pkgs-stable;
           inherit pkgs-unstable;
-	};
+          quickshell = quickshell.packages.${system}.default;
+        };
         system.packages = [ anyrun.packages.${system}.anyrun
                           ];
         
