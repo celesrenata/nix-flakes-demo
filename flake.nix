@@ -14,7 +14,7 @@
     quickshell.url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
     dots-hyprland.url = "github:celesrenata/end-4-flakes";
     dots-hyprland.inputs.nixpkgs.follows = "nixpkgs";
-    dots-hyprland-source.url = "github:celesrenata/dots-hyprland/quickshell";
+    dots-hyprland-source.url = "github:celesrenata/dots-hyprland/quickshell-locked";
     dots-hyprland-source.flake = false;
   };
 
