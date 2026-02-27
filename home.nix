@@ -14,14 +14,6 @@ let
   };
   in
   {
-  imports = [ inputs.dots-hyprland.homeManagerModules.default ];
-
-  programs.dots-hyprland = {
-    enable = true;
-    source = inputs.dots-hyprland-source + "/.config";
-    packageSet = "essential";
-    mode = "hybrid";
-  };
 
   # TODO please change the username & home directory to your own
   home.username = "demo";

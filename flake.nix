@@ -85,7 +85,12 @@
               inherit pkgs-stable;
               inherit pkgs-unstable;
             };
-            home-manager.users.demo = import ./home.nix;
+            home-manager.users.demo = {
+              imports = [
+                ./home.nix
+                ./nixberry/hyprland.nix
+              ];
+            };
           }
         ];
       };
