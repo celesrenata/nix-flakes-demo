@@ -43,6 +43,11 @@ let
   home.file.".local/bin/initialSetup.sh" = {
     source = celes-dots + "/.local/bin/initialSetup.sh";
   };
+  
+  # Quickshell service expects initialSetup.sh in home directory
+  home.file."initialSetup.sh" = {
+    source = celes-dots + "/.local/bin/initialSetup.sh";
+  };
   home.file.".local/bin/agsAction.sh" = {
     source = celes-dots + "/.local/bin/agsAction.sh";
   };
