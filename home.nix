@@ -18,7 +18,7 @@ let
 
   programs.dots-hyprland = {
     enable = true;
-    source = inputs.dots-hyprland-source;
+    source = inputs.dots-hyprland-source + "/.config";
     packageSet = "essential";
     mode = "hybrid";
   };
