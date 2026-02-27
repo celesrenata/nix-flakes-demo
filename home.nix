@@ -14,27 +14,22 @@ let
   };
   in
   {
+  imports = [ inputs.dots-hyprland.homeManagerModules.default ];
+
+  programs.dots-hyprland = {
+    enable = true;
+    source = inputs.dots-hyprland-source;
+    packageSet = "essential";
+    mode = "hybrid";
+  };
 
   # TODO please change the username & home directory to your own
   home.username = "demo";
   home.homeDirectory = "/home/demo";
 
-  # link the configuration file in current directory to the specified location in home directory
-  # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
-
-  # link all files in `./scripts` to `~/.config/i3/scripts`
-
-  home.file.".configstaging" = {
-    source = inputs.dots-hyprland-source + "/.config";
-    recursive = true;
-    executable = true;
-  };
   home.file."Backgrounds" = {
     source = celes-dots + "/Backgrounds";
     recursive = true;
-  };
-  home.file.".local/bin/initialSetup.sh" = {
-    source = celes-dots + "/.local/bin/initialSetup.sh";
   };
   home.file.".local/bin/agsAction.sh" = {
     source = celes-dots + "/.local/bin/agsAction.sh";
@@ -44,9 +39,6 @@ let
   };
   home.file.".local/bin/wofi-calc" = {
     source = wofi-calc + "/wofi-calc.sh";
-  };
-  home.file.".config/hypr/hyprland.conf" = {
-    source = inputs.dots-hyprland-source + "/.config/hypr/hyprland.conf";
   };
   
   # encode the file content in nix configuration file directly

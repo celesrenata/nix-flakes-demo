@@ -12,11 +12,13 @@
     dream2nix.url = "github:nix-community/dream2nix";
     uniclip.url = "github:celesrenata/uniclip";
     quickshell.url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
+    dots-hyprland.url = "github:celesrenata/end-4-flakes";
+    dots-hyprland.inputs.nixpkgs.follows = "nixpkgs";
     dots-hyprland-source.url = "github:celesrenata/dots-hyprland/quickshell";
     dots-hyprland-source.flake = false;
   };
 
-  outputs = inputs@{ nixpkgs, nixpkgs-stable, nixpkgs-unstable, anyrun, home-manager, dream2nix, nixos-hardware, uniclip, quickshell, dots-hyprland-source, ... }:
+  outputs = inputs@{ nixpkgs, nixpkgs-stable, nixpkgs-unstable, anyrun, home-manager, dream2nix, nixos-hardware, uniclip, quickshell, dots-hyprland, dots-hyprland-source, ... }:
   let
     system = "aarch64-linux";
     lib = nixpkgs.lib;
@@ -47,6 +49,7 @@
       ];
       config.allowUnsupportedSystem = true;
       overlays = [
+        dots-hyprland.overlays.default
         (import ./overlays/debugpy.nix)
         (import ./overlays/materialyoucolor.nix)
         (import ./overlays/end-4-dots.nix)
