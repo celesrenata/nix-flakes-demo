@@ -94,7 +94,6 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   
@@ -123,8 +122,6 @@
   # Enable Fonts.
   fonts.packages = with pkgs; [
     noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
     liberation_ttf
     fira-code
     fira-code-symbols
@@ -133,7 +130,7 @@
     proggyfonts
     fontconfig
     lexend
-    nerdfonts
+    #nerdfonts
     material-symbols
     bibata-cursors
   ];
@@ -215,16 +212,14 @@
     alsa-utils
 
     # System Tools.
-    glxinfo
+    mesa-demos
     blueman
     networkmanagerapplet
     nix-index
     mlocate
-    barrier
     openssl
-    gnome.simple-scan
+    simple-scan
     btop
-    thefuck
 
     # Shells.
     fish
@@ -241,9 +236,8 @@
     polkit_gnome
     dconf
     killall
-    gnome.gnome-keyring
     evtest
-    gnome.zenity
+    zenity
     linux-pam
     cliphist
     sudo
@@ -292,7 +286,7 @@
     pulseaudio
     xdg-desktop-portal-hyprland
     hyprpaper
-    gnome.gdm
+    gdm
   ]);
 
   # List services that you want to enable:
@@ -307,5 +301,5 @@
   # networking.firewall.enable = false;
 
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "24.05"; # Did you read the comment?
+  system.stateVersion = "25.11"; # Did you read the comment?
 }

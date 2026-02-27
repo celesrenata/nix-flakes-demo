@@ -21,7 +21,7 @@ let
     configDir = null;
     extraPackages = with pkgs; [
       gtksourceview
-      webkitgtk
+      webkitgtk_6_0
       accountsservice
     ];
   };
@@ -188,7 +188,6 @@ let
     # Player and Audio
     pavucontrol
     libdbusmenu-gtk3
-    plasma-browser-integration
     playerctl
     mpv
     vlc
@@ -201,18 +200,18 @@ let
     yad
     ydotool
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
 
     # QT
     libsForQt5.qwt
 
     # Gnome Stuff
     polkit_gnome
-    gnome.gnome-keyring
-    gnome.gnome-control-center
-    gnome.gnome-bluetooth
-    gnome.gnome-shell
-    gnome.nautilus
+    gnome-keyring
+    gnome-control-center
+    gnome-bluetooth
+    gnome-shell
+    nautilus
     yaru-theme
     blueberry
     networkmanager
@@ -233,7 +232,6 @@ let
     libnotify
 
     # Themes
-    qt5ct
 
     # Screenshot and Recorder
     swappy
@@ -255,7 +253,6 @@ let
     dart-sass
     eza
     gojq
-    gradience
     hypridle
     hyprlock
     hyprpicker
@@ -365,7 +362,7 @@ let
   # You can update home Manager without changing this value. See
   # the home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "24.05";
+  home.stateVersion = "25.11";
 
   # Let home Manager install and manage itself.
   programs.home-manager.enable = true;
