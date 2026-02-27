@@ -81,10 +81,6 @@ let
 
   # Packages that should be installed to the user profile.
   home.packages = 
-  [ inputs.quickshell.packages.aarch64-linux.default ]
-  
-  ++
-  
   (with pkgs; [
     # here is some command line tools I use frequently
     # feel free to add your own or remove some of them
