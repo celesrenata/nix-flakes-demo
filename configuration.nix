@@ -63,6 +63,18 @@
   services.xserver.desktopManager.mate.enable = true;
   services.xserver.desktopManager.mate.enableWaylandSession = true;
 
+  # Enable VMware guest services
+  virtualisation.vmware.guest.enable = true;
+
+  # Enable the vmware user service (for desktop resizing)
+  systemd.user.services.vmware-user = {
+    description = "VMware User Agent";
+    wantedBy = [ "graphical-session.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.open-vm-tools}/bin/vmware-user";
+      Restart = "on-failure";
+    };
+  };
   programs.hyprland = {
     # Install the packages from nixpkgs
     enable = true;

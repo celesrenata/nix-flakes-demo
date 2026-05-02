@@ -5,6 +5,7 @@
       libGL
       mesa
     ];
+    hardware.opengl.enable = true;
     hardware.graphics = {
       enable = true;
       extraPackages = with pkgs; [

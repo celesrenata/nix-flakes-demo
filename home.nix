@@ -317,7 +317,9 @@ let
       EDITOR = "vim";
     };
   };
-  
+  systemd.user.services.quickshell = {
+    Service.Environment = [ "QT_QUICK_BACKEND=software" ];
+  }; 
   home.sessionPath = [
     ".local/bin"
   ];

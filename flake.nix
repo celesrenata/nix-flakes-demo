@@ -11,14 +11,14 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     dream2nix.url = "github:nix-community/dream2nix";
     uniclip.url = "github:celesrenata/uniclip";
-    quickshell.url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
+    #quickshell.url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
     dots-hyprland.url = "github:celesrenata/end-4-flakes";
     dots-hyprland.inputs.nixpkgs.follows = "nixpkgs";
     dots-hyprland-source.url = "github:celesrenata/dots-hyprland/quickshell-locked";
     dots-hyprland-source.flake = false;
   };
 
-  outputs = inputs@{ nixpkgs, nixpkgs-stable, nixpkgs-unstable, anyrun, home-manager, dream2nix, nixos-hardware, uniclip, quickshell, dots-hyprland, dots-hyprland-source, ... }:
+  outputs = inputs@{ nixpkgs, nixpkgs-stable, nixpkgs-unstable, anyrun, home-manager, dream2nix, nixos-hardware, uniclip, dots-hyprland, dots-hyprland-source, ... }:
   let
     system = "aarch64-linux";
     lib = nixpkgs.lib;
@@ -64,7 +64,7 @@
           inherit pkgs;
           inherit pkgs-stable;
           inherit pkgs-unstable;
-          quickshell = quickshell.packages.${system}.default;
+          #quickshell = quickshell.packages.${system}.default;
         };
         system.packages = [ anyrun.packages.${system}.anyrun
                           ];
